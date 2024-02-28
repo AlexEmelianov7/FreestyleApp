@@ -1,6 +1,6 @@
 {
 	"sap.app": {
-		"id": "leverx.app",
+		"id": "freestyle.app",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"title": "{{appTitle}}",
@@ -16,16 +16,17 @@
 			"phone": true
 		},
 		"supportedThemes": [
-			"sap_belize"
+			"sap_belize",
+			"sap_horizon"
 		]
 	},
 	"sap.ui5": {
-		"rootView": "leverx.app.view.App",
+		"rootView": "freestyle.app.view.App",
 		"routing": {
 			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
-				"viewPath": "leverx.app.view",
+				"viewPath": "freestyle.app.view",
 				"controlId": "RootApp",
 				"controlAggregation": "pages",
 				"bypassed": {
@@ -38,17 +39,17 @@
 			"routes": [
 				{
 					"pattern": "",
-					"name": "FirstPage",
+					"name": "ProductsOverview",
 					"target": [
-						"firstPage"
+						"productsOverview"
 					]
 				}
 			],
 
 			"targets": {
-				"firstPage": {
-					"viewName": "FirstPage",
-					"viewId": "firstPage",
+				"productsOverview": {
+					"viewName": "ProductsOverview",
+					"viewId": "productsOverview",
 					"viewLevel": 1
 				},
 
@@ -68,7 +69,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "leverx.app.i18n.i18n"
+					"bundleName": "freestyle.app.i18n.i18n"
 				}
 			}
 		}

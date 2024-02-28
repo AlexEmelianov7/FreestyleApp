@@ -1,0 +1,222 @@
+<mvc:View
+		controllerName="freestyle.app.controller.ProductsOverview"
+		height="100%"
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns:core="sap.ui.core"
+		xmlns="sap.m"
+		xmlns:f="sap.f"
+		xmlns:fb="sap.ui.comp.filterbar"
+		xmlns:svm="sap.ui.comp.smartvariants">
+		<f:DynamicPage 
+			showFooter="true">
+			<f:title>
+				<f:DynamicPageTitle>
+					<f:heading>
+						<svm:SmartVariantManagement id="smartVariant" showExecuteOnSelection="true" />
+					</f:heading>
+					<f:expandedContent>
+						<Label id="expandedLabel" text="No filters active" />
+					</f:expandedContent>
+					<f:snappedContent>
+						<Label id="snappedLabel" text="No filters active" />
+					</f:snappedContent>
+				</f:DynamicPageTitle>
+			</f:title>
+			<f:header>
+				<f:DynamicPageHeader>
+					<f:content>
+						<fb:FilterBar 
+							id="filterBar" 
+							persistencyKey="myPersKey" 
+							useToolbar="false" 
+							search="onApplyFilters" 
+							filterChange="onFilterChange" 
+							afterVariantLoad="onAfterVariantLoad">
+							<fb:filterGroupItems>
+								<fb:FilterGroupItem 
+									name="name" 
+									label="{i18n>lName}" 
+									groupName="Group1" 
+									visibleInFilterBar="true"
+								>
+									<fb:control>
+										<MultiInput 
+											id="miProductNames"
+											suggestionItems="{
+												path: '/products',
+												sorter: { path: 'name' }
+											}"
+											tokenUpdate="onSelectionChange">
+											<core:Item key="{id}" text="{name}" />
+										</MultiInput>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem 
+									name="category" 
+									label="{i18n>lCategory}" 
+									groupName="Group2" 
+									visibleInFilterBar="true"
+								>
+									<fb:control>
+										<MultiComboBox
+											name="{i18n>tName}"
+											selectionChange="onSelectionChange"
+											items="{
+												path: '/categories',
+												templateShareable: true
+											}"
+										>
+											<core:Item key="{id}" text="{name}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem 
+									name="description" 
+									label="{i18n>lDescription}" 
+									groupName="Group3" 
+									visibleInFilterBar="true"
+								>
+									<fb:control>
+										<Input
+											id="iDescription"
+											value="{/description}"
+											placeholder="{i18n>phEnterDescription}"
+											enableTableAutoPopinMode="true"
+											showSuggestion="true"
+											maxSuggestionWidth="100%"
+											showClearIcon="true"
+											showTableSuggestionValueHelp="false"
+											change="onSelectionChange">
+										</Input>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem 
+									name="price" 
+									label="{i18n>lPrice}" 
+									groupName="Group4" 
+									visibleInFilterBar="true"
+								>
+									<fb:control>
+										<MultiInput 
+											id="miPrice"
+											valueHelpOnly="true"
+											tokenUpdate="onSelectionChange"
+											valueHelpRequest="onOpenPriceValueHelpDialog">
+											<core:Item key="{id}" text="{price}" />
+										</MultiInput>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem 
+									name="country" 
+									label="{i18n>lCountry}" 
+									groupName="Group5" 
+									visibleInFilterBar="true"
+								>
+									<fb:control>
+										<MultiInput 
+											id="miCountries"
+											suggestionItems="{
+												path: '/categories',
+												sorter: { path: 'country' }
+											}"
+											tokenUpdate="onSelectionChange"
+											valueHelpRequest="onOpenCountrySelectDialog">
+											<core:Item key="{id}" text="{country}" />
+										</MultiInput>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem 
+									name="date" 
+									label="{i18n>lCreated}" 
+									groupName="Group6" 
+									visibleInFilterBar="true">
+									<fb:control>
+										<DateRangeSelection
+											id="dateRangeSelection"
+											change="onSelectionChange"/>
+									</fb:control>
+								</fb:FilterGroupItem>
+							</fb:filterGroupItems>
+						</fb:FilterBar>
+					</f:content>
+				</f:DynamicPageHeader>
+			</f:header>
+			<f:content>
+				<Table
+					id="productsTable"
+					items="{/products}"
+					mode="MultiSelect"
+					updateFinished="onProductsTableUpdateFinished"
+				>
+					<headerToolbar>
+						<OverflowToolbar>
+							<Title text="{productsOverview>/productsTableTitle}" level="H2"/>
+							<ToolbarSpacer/>
+                    		<Button 
+								icon="sap-icon://action-settings" 
+								press="openP13nDialog" 
+								tooltip="{i18n>ttSettings}"/>
+						</OverflowToolbar>
+					</headerToolbar>
+					<columns>
+						<Column id="name_col">
+							<Text text="{i18n>tName}"/>
+						</Column>
+						<Column id="category_col">
+							<Text text="{i18n>tCategory}"/>
+						</Column>
+						<Column id="description_col">
+							<Text text="{i18n>tDescription}"/>
+						</Column>
+						<Column id="price_col">
+							<Text text="{i18n>tPrice}"/>
+						</Column>
+						<Column id="country_col">
+							<Text text="{i18n>tCountry}"/>
+						</Column>
+						<Column id="created_col">
+							<Text text="{i18n>tCreated}"/>
+						</Column>
+					</columns>
+
+					<items>
+						<ColumnListItem vAlign="Middle">
+							<cells>
+								<ObjectIdentifier title="{name}" />
+								<Text text="{category}" />
+								<Text text="{description}" />
+								<ObjectNumber
+									number="{price}"
+									unit="{i18n>uUSD}"/>
+								<Text text="{country}" />
+								<Text
+									text="{
+										path: 'date',
+										type: 'sap.ui.model.type.Date',
+										formatOptions: {
+											style: 'medium',
+											source: {
+												pattern: 'yyyy-MM-dd'
+											}
+										}
+									}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</f:content>
+			<f:footer>
+				<OverflowToolbar>
+					<ToolbarSpacer />
+					<Button
+						icon="sap-icon://add"
+						type="Emphasized"
+						text="{i18n>btnCreate}"/>
+					<Button
+						icon="sap-icon://delete"
+						type="Reject"
+						text="{i18n>btnDelete}"/>
+				</OverflowToolbar>
+			</f:footer>
+		</f:DynamicPage>
+</mvc:View>

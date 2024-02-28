@@ -1,0 +1,266 @@
+{
+   "categories":[
+      {
+         "id":"1",
+         "name":"Electronics",
+         "description":"Electronics products",
+         "imageUrl":"https://example.com/electronics.jpg",
+         "country":"USA",
+         "created":"2022-01-01"
+      },
+      {
+         "id":"2",
+         "name":"Fashion",
+         "description":"Fashion products",
+         "imageUrl":"https://example.com/fashion.jpg",
+         "country":"Italy",
+         "created":"2023-02-03"
+      },
+      {
+         "id":"3",
+         "name":"Home",
+         "description":"Home products",
+         "imageUrl":"https://example.com/home.jpg",
+         "country":"France",
+         "created":"2021-12-31"
+      },
+      {
+         "id":"4",
+         "name":"Books",
+         "description":"Book products",
+         "imageUrl":"https://example.com/books.jpg",
+         "country":"UK",
+         "created":"2022-05-07"
+      },
+      {
+         "id":"5",
+         "name":"Sports",
+         "description":"Sports products",
+         "imageUrl":"https://example.com/sports.jpg",
+         "country":"Germany",
+         "created":"2023-05-02"
+      }
+   ],
+   "products":[
+      {
+         "id":"1",
+         "category": "Electronics",
+         "name":"Smartphone",
+         "description":"A high-end smartphone with 5G connectivity",
+         "price":899.99,
+         "imageUrl":"https://example.com/images/smartphone.jpg",
+         "country":"USA",
+         "date":"2023-01-22"
+      },
+      {
+         "id":"2",
+         "category": "Electronics",
+         "name":"Laptop",
+         "description":"A powerful laptop with a high-resolution display",
+         "price":1499.99,
+         "imageUrl":"https://example.com/images/laptop.jpg",
+         "country":"UK",
+         "date":"2023-03-11"
+      },
+      {
+         "id":"3",
+         "category": "Electronics",
+         "name":"Headphones",
+         "description":"Wireless headphones with noise-cancelling technology",
+         "price":299.99,
+         "imageUrl":"https://example.com/images/headphones.jpg",
+         "country":"Germany",
+         "date":"2023-02-12"
+      },
+      {
+         "id":"4",
+         "category": "Electronics",
+         "name":"Smart Watch",
+         "description":"A sleek and stylish smart watch",
+         "price":249.99,
+         "imageUrl":"https://example.com/images/smart-watch.jpg",
+         "country":"USA",
+         "date":"2023-05-13"
+      },
+      {
+         "id":"5",
+         "category": "Fashion",
+         "name":"Leather Jacket",
+         "description":"A classic leather jacket for all seasons",
+         "price":399.99,
+         "imageUrl":"https://example.com/images/leather-jacket.jpg",
+         "country":"Germany",
+         "date":"2023-01-22"
+      },
+      {
+         "id":"6",
+         "category": "Fashion",
+         "name":"Dress",
+         "description":"A beautiful and elegant dress for any occasion",
+         "price":249.99,
+         "imageUrl":"https://example.com/images/dress.jpg",
+         "country":"UK",
+         "date":"2022-11-22"
+      },
+      {
+         "id":"7",
+         "category": "Home",
+         "name":"Sofa",
+         "description":"A comfortable and stylish sofa for your living room",
+         "price":999.99,
+         "imageUrl":"https://example.com/images/sofa.jpg",
+         "country":"USA",
+         "date":"2021-12-31"
+      },
+      {
+         "id":"8",
+         "category": "Home",
+         "name":"Coffee Table",
+         "description":"A modern and functional coffee table for your living room",
+         "price":399.99,
+         "imageUrl":"https://example.com/images/coffee-table.jpg",
+         "country":"Germany",
+         "date":"2023-02-22"
+      },
+      {
+         "id":"9",
+         "category": "Home",
+         "name":"Bed",
+         "description":"A comfortable and sturdy bed for a good night's sleep",
+         "price":1499.99,
+         "imageUrl":"https://example.com/images/bed.jpg",
+         "country":"India",
+         "date":"2023-05-05"
+      },
+      {
+         "id":"10",
+         "category": "Home",
+         "name":"Dining Table",
+         "description":"A beautiful and durable dining table for your home",
+         "price":899.99,
+         "imageUrl":"https://example.com/images/dining-table.jpg",
+         "country":"Germany",
+         "date":"2023-06-13"
+      },
+      {
+         "id":"11",
+         "category": "Home",
+         "name":"Chair",
+         "description":"A comfortable and stylish chair for your home office",
+         "price":249.99,
+         "imageUrl":"https://example.com/images/chair.jpg",
+         "country":"USA",
+         "date":"2021-09-11"
+      },
+      {
+         "id":"12",
+         "category": "Home",
+         "name":"Rug",
+         "description":"A beautiful and durable rug to tie your room together",
+         "price":199.99,
+         "imageUrl":"https://example.com/images/rug.jpg",
+         "country":"Italy",
+         "date":"2023-07-22"
+      },
+      {
+         "id":"13",
+         "category": "Home",
+         "name":"Bookshelf",
+         "description":"A sturdy and functional bookshelf for your home library",
+         "price":599.99,
+         "imageUrl":"https://example.com/images/bookshelf.jpg",
+         "country":"Italy",
+         "date":"2023-01-08"
+      },
+      {
+         "id":"14",
+         "category": "Books",
+         "name":"The Catcher in the Rye",
+         "description":"J.D. Salinger",
+         "imageUrl":"https://example.com/catcher-in-the-rye.jpg",
+         "price":10.99,
+         "country":"USA",
+         "date":"2022-01-01"
+      },
+      {
+         "id":"15",
+         "category": "Books",
+         "name":"To Kill a Mockingbird",
+         "description":"Harper Lee",
+         "imageUrl":"https://example.com/to-kill-a-mockingbird.jpg",
+         "price":12.99,
+         "country":"UK",
+         "date":"2021-05-10"
+      },
+      {
+         "id":"16",
+         "category": "Books",
+         "name":"1984",
+         "description":"George Orwell",
+         "imageUrl":"https://example.com/1984.jpg",
+         "price":8.99,
+         "country":"UK",
+         "date":"2022-11-03"
+      },
+      {
+         "id":"17",
+         "category": "Books",
+         "name":"Pride and Prejudice",
+         "description":"Jane Austen",
+         "imageUrl":"https://example.com/pride-and-prejudice.jpg",
+         "price":9.99,
+         "country":"USA",
+         "date":"2022-02-14"
+      },
+      {
+         "id":"18",
+         "category": "Sports",
+         "name":"Running Shoes",
+         "description":"Comfortable shoes for running and jogging.",
+         "price":69.99,
+         "imageUrl":"https://example.com/images/sports/running_shoes.jpg",
+         "country":"USA",
+         "date":"2023-02-20"
+      },
+      {
+         "id":"19",
+         "category": "Sports",
+         "name":"Basketball",
+         "description":"High-quality basketball for outdoor use.",
+         "price":24.99,
+         "imageUrl":"https://example.com/images/sports/basketball.jpg",
+         "country":"India",
+         "date":"2022-01-27"
+      },
+      {
+         "id":"20",
+         "category": "Sports",
+         "name":"Bicycle",
+         "description":"A lightweight bicycle for commuting or leisurely rides.",
+         "price":399.99,
+         "imageUrl":"https://example.com/images/sports/bicycle.jpg",
+         "country":"Italy",
+         "date":"2023-03-21"
+      },
+      {
+         "id":"21",
+         "category": "Sports",
+         "name":"Yoga Mat",
+         "description":"A durable yoga mat with non-slip surface.",
+         "price":29.99,
+         "imageUrl":"https://example.com/images/sports/yoga_mat.jpg",
+         "country":"UK",
+         "date":"2023-01-23"
+      },
+      {
+         "id":"22",
+         "category": "Sports",
+         "name":"Tennis Racket",
+         "description":"A high-quality tennis racket for competitive play.",
+         "price":129.99,
+         "imageUrl":"https://example.com/images/sports/tennis_racket.jpg",
+         "country":"USA",
+         "date":"2023-04-27"
+      }
+   ]
+}
