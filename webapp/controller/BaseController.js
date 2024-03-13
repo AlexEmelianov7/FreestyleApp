@@ -4,15 +4,19 @@
  * @extends sap.ui.core.mvc.Controller
  */
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
-	"sap/ui/core/format/DateFormat"
+    "sap/ui/core/mvc/Controller"
 ], function (
-    Controller,
-	DateFormat
+    Controller
     ) {
     "use strict";
 
     return Controller.extend("aliaksandr.yemelyanau.products.managment.controller.BaseController", {
+		/**
+		 * Binds the view element to the specified path and sets the change event handler.
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.BaseController
+		 * @param {string} sPath - The path to bind the view element to.
+		 */
         bindView: function (sPath) {
 			this.getView().bindElement({
 				path: sPath,
@@ -22,6 +26,12 @@ sap.ui.define([
 			});
 		},
 
+		/**
+		 * Handles the change event of the view element binding.
+		 * Checks if the bound context has a valid "id" property. If not, navigates to the "notFound" target.
+		 * @private
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.BaseController
+		 */
         _onBindingChange : function () {
 			const oView = this.getView();
 			const oViewBinding = oView.getElementBinding();
@@ -62,14 +72,6 @@ sap.ui.define([
    		 */
         getResourceBundle : function () {
             return this.getOwnerComponent().getModel("i18n").getResourceBundle();
-        },
-
-		// formatDate: function(vDate) {
-		// 	const oDateFormat = DateFormat.getDateInstance({
-		// 		pattern: "yyyy-MM-dd"
-		// 	});
-
-		// 	return oDateFormat.format(vDate);
-		// },
+        }
     });
 });
