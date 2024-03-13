@@ -43,224 +43,326 @@
    ],
    "products":[
       {
-         "id":"1",
+         "id":"03123",
          "category": "Electronics",
          "name":"Smartphone",
          "description":"A high-end smartphone with 5G connectivity",
          "price":899.99,
          "imageUrl":"https://example.com/images/smartphone.jpg",
          "country":"USA",
-         "date":"2023-01-22"
+         "date":"2023-01-22",
+         "manufacturer": "Apple",
+         "status": "Available",
+         "barcode": "123456789012",
+         "quantity": 4
       },
       {
-         "id":"2",
+         "id":"98765",
          "category": "Electronics",
          "name":"Laptop",
          "description":"A powerful laptop with a high-resolution display",
          "price":1499.99,
          "imageUrl":"https://example.com/images/laptop.jpg",
          "country":"UK",
-         "date":"2023-03-11"
+         "date":"2023-03-11",
+         "manufacturer": "Dell",
+         "status": "In stock",
+         "barcode": "987654321098",
+         "quantity": 9
       },
       {
-         "id":"3",
+         "id":"43210",
          "category": "Electronics",
          "name":"Headphones",
          "description":"Wireless headphones with noise-cancelling technology",
          "price":299.99,
          "imageUrl":"https://example.com/images/headphones.jpg",
          "country":"Germany",
-         "date":"2023-02-12"
+         "date":"2023-02-12",
+         "manufacturer": "Sony",
+         "status": "Out of stock",
+         "barcode": "567890123456",
+         "quantity": 0
       },
       {
-         "id":"4",
+         "id":"54321",
          "category": "Electronics",
          "name":"Smart Watch",
          "description":"A sleek and stylish smart watch",
          "price":249.99,
          "imageUrl":"https://example.com/images/smart-watch.jpg",
          "country":"USA",
-         "date":"2023-05-13"
+         "date":"2023-05-13",
+         "manufacturer": "Samsung",
+         "status": "Available",
+         "barcode": "109876543210",
+         "quantity": 3
       },
       {
-         "id":"5",
+         "id":"65432",
          "category": "Fashion",
          "name":"Leather Jacket",
          "description":"A classic leather jacket for all seasons",
          "price":399.99,
          "imageUrl":"https://example.com/images/leather-jacket.jpg",
          "country":"Germany",
-         "date":"2023-01-22"
+         "date":"2023-01-22",
+         "manufacturer": "Gucci",
+         "status": "In stock",
+         "barcode": "864209753198",
+         "quantity": 10
       },
       {
-         "id":"6",
+         "id":"12345",
          "category": "Fashion",
          "name":"Dress",
          "description":"A beautiful and elegant dress for any occasion",
          "price":249.99,
          "imageUrl":"https://example.com/images/dress.jpg",
          "country":"UK",
-         "date":"2022-11-22"
+         "date":"2022-11-22",
+         "manufacturer": "Louis Vuitton",
+         "status": "Out of stock",
+         "barcode": "314159265359",
+         "quantity": 0
       },
       {
-         "id":"7",
+         "id":"34567",
          "category": "Home",
          "name":"Sofa",
          "description":"A comfortable and stylish sofa for your living room",
          "price":999.99,
          "imageUrl":"https://example.com/images/sofa.jpg",
          "country":"USA",
-         "date":"2021-12-31"
+         "date":"2021-12-31",
+         "manufacturer": "IKEA",
+         "status": "In stock",
+         "barcode": "271828182845",
+         "quantity": 5
       },
       {
-         "id":"8",
+         "id":"87654",
          "category": "Home",
          "name":"Coffee Table",
          "description":"A modern and functional coffee table for your living room",
          "price":399.99,
          "imageUrl":"https://example.com/images/coffee-table.jpg",
          "country":"Germany",
-         "date":"2023-02-22"
+         "date":"2023-02-22",
+         "manufacturer": "Whirlpool",
+         "status": "Available",
+         "barcode": "888888888888",
+         "quantity": 6
       },
       {
-         "id":"9",
+         "id":"23456",
          "category": "Home",
          "name":"Bed",
          "description":"A comfortable and sturdy bed for a good night's sleep",
          "price":1499.99,
          "imageUrl":"https://example.com/images/bed.jpg",
          "country":"India",
-         "date":"2023-05-05"
+         "date":"2023-05-05",
+         "manufacturer": "Shark",
+         "status": "Out of stock",
+         "barcode": "999999999999",
+         "quantity": 0
       },
       {
-         "id":"10",
+         "id":"09876",
          "category": "Home",
          "name":"Dining Table",
          "description":"A beautiful and durable dining table for your home",
          "price":899.99,
          "imageUrl":"https://example.com/images/dining-table.jpg",
          "country":"Germany",
-         "date":"2023-06-13"
+         "date":"2023-06-13",
+         "manufacturer": "Herman Miller",
+         "status": "Available",
+         "barcode": "777777777777",
+         "quantity": 2
       },
       {
-         "id":"11",
+         "id":"78901",
          "category": "Home",
          "name":"Chair",
          "description":"A comfortable and stylish chair for your home office",
          "price":249.99,
          "imageUrl":"https://example.com/images/chair.jpg",
          "country":"USA",
-         "date":"2021-09-11"
+         "date":"2021-09-11",
+         "manufacturer": "Wooden corp",
+         "status": "In stock",
+         "barcode": "555555555555",
+         "quantity": 7
       },
       {
-         "id":"12",
+         "id":"21098",
          "category": "Home",
          "name":"Rug",
          "description":"A beautiful and durable rug to tie your room together",
          "price":199.99,
          "imageUrl":"https://example.com/images/rug.jpg",
          "country":"Italy",
-         "date":"2023-07-22"
+         "date":"2023-07-22",
+         "manufacturer": "Ashley Furniture Industries",
+         "status": "Out of stock",
+         "barcode": "333333333333",
+         "quantity": 0
       },
       {
-         "id":"13",
+         "id":"89012",
          "category": "Home",
          "name":"Bookshelf",
          "description":"A sturdy and functional bookshelf for your home library",
          "price":599.99,
          "imageUrl":"https://example.com/images/bookshelf.jpg",
          "country":"Italy",
-         "date":"2023-01-08"
+         "date":"2023-01-08",
+         "manufacturer": "Crate and Barrel",
+         "status": "Out of stock",
+         "barcode": "222222222222",
+         "quantity": 0
       },
       {
-         "id":"14",
+         "id":"10987",
          "category": "Books",
          "name":"The Catcher in the Rye",
          "description":"J.D. Salinger",
          "imageUrl":"https://example.com/catcher-in-the-rye.jpg",
          "price":10.99,
          "country":"USA",
-         "date":"2022-01-01"
+         "date":"2022-01-01",
+         "manufacturer": "Crate and Barrel",
+         "status": "Out of stock",
+         "barcode": "222222222222",
+         "quantity": 0
       },
       {
-         "id":"15",
+         "id":"67890",
          "category": "Books",
          "name":"To Kill a Mockingbird",
          "description":"Harper Lee",
          "imageUrl":"https://example.com/to-kill-a-mockingbird.jpg",
          "price":12.99,
          "country":"UK",
-         "date":"2021-05-10"
+         "date":"2021-05-10",
+         "manufacturer": "Penguin Random House",
+         "status": "Available",
+         "barcode": "666666666666",
+         "quantity": 10
       },
       {
-         "id":"16",
+         "id":"98760",
          "category": "Books",
          "name":"1984",
          "description":"George Orwell",
          "imageUrl":"https://example.com/1984.jpg",
          "price":8.99,
          "country":"UK",
-         "date":"2022-11-03"
+         "date":"2022-11-03",
+         "manufacturer": "Hachette Book Group",
+         "status": "In stock",
+         "barcode": "121212121212",
+         "quantity": 3
       },
       {
-         "id":"17",
+         "id":"87609",
          "category": "Books",
          "name":"Pride and Prejudice",
          "description":"Jane Austen",
          "imageUrl":"https://example.com/pride-and-prejudice.jpg",
          "price":9.99,
          "country":"USA",
-         "date":"2022-02-14"
+         "date":"2022-02-14",
+         "manufacturer": "Simon & Schuster",
+         "status": "Out of stock",
+         "barcode": "989898989898",
+         "quantity": 0
       },
       {
-         "id":"18",
+         "id":"76509",
          "category": "Sports",
          "name":"Running Shoes",
          "description":"Comfortable shoes for running and jogging.",
          "price":69.99,
          "imageUrl":"https://example.com/images/sports/running_shoes.jpg",
          "country":"USA",
-         "date":"2023-02-20"
+         "date":"2023-02-20",
+         "manufacturer": "Nike",
+         "status": "In stock",
+         "barcode": "343434343434",
+         "quantity": 12
       },
       {
-         "id":"19",
+         "id":"65409",
          "category": "Sports",
          "name":"Basketball",
          "description":"High-quality basketball for outdoor use.",
          "price":24.99,
          "imageUrl":"https://example.com/images/sports/basketball.jpg",
          "country":"India",
-         "date":"2022-01-27"
+         "date":"2022-01-27",
+         "manufacturer": "Adidas",
+         "status": "Available",
+         "barcode": "565656565656",
+         "quantity": 5
       },
       {
-         "id":"20",
+         "id":"54309",
          "category": "Sports",
          "name":"Bicycle",
          "description":"A lightweight bicycle for commuting or leisurely rides.",
          "price":399.99,
          "imageUrl":"https://example.com/images/sports/bicycle.jpg",
          "country":"Italy",
-         "date":"2023-03-21"
+         "date":"2023-03-21",
+         "manufacturer": "Cube",
+         "status": "Out of stock",
+         "barcode": "787878787878",
+         "quantity": 0
       },
       {
-         "id":"21",
+         "id":"43209",
          "category": "Sports",
          "name":"Yoga Mat",
          "description":"A durable yoga mat with non-slip surface.",
          "price":29.99,
          "imageUrl":"https://example.com/images/sports/yoga_mat.jpg",
          "country":"UK",
-         "date":"2023-01-23"
+         "date":"2023-01-23",
+         "manufacturer": "Under Armour",
+         "status": "In stock",
+         "barcode": "101010101010",
+         "quantity": 7
       },
       {
-         "id":"22",
+         "id":"32109",
          "category": "Sports",
          "name":"Tennis Racket",
          "description":"A high-quality tennis racket for competitive play.",
          "price":129.99,
          "imageUrl":"https://example.com/images/sports/tennis_racket.jpg",
          "country":"USA",
-         "date":"2023-04-27"
+         "date":"2023-04-27",
+         "manufacturer": "Reebok",
+         "status": "Available",
+         "barcode": "112233445566",
+         "quantity": 8
+      }
+   ],
+   "statuses":[
+      {
+         "statusID":"0",
+         "statusText":"Available"
+      },
+      {
+         "statusID":"1",
+         "statusText":"In stock"
+      },
+      {
+         "statusID":"2",
+         "statusText":"Out of stock"
       }
    ]
 }

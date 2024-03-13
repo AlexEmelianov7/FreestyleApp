@@ -13,15 +13,25 @@
 			data-sap-ui-theme="sap_horizon"
 			data-sap-ui-compatVersion="edge"
 			data-sap-ui-language="en"
-			data-sap-ui-resourceroots='{"freestyle.app": "./"}'>
+			data-sap-ui-resourceroots='{"aliaksandr.yemelyanau.products.managment": "./"}'>
 	</script>
 
 	<script>
-		sap.ui.getCore().attachInit(function() {
-			new sap.ui.core.ComponentContainer({
-				name : "freestyle.app"
-			}).placeAt("content");
+		new sap.ui.core.Component.create({
+			// name: "aliaksandr.yemelyanau.products.managment",
+			manifest: "./manifest.json"
+		}).then(oComponent => {
+			const oContainer = new sap.ui.core.ComponentContainer({
+				component: oComponent
+			});
+			oContainer.placeAt("content");
 		});
+		
+		// sap.ui.getCore().attachInit(function() {
+		// 	new sap.ui.core.ComponentContainer({
+		// 		name : "aliaksandr.yemelyanau.products.managment"
+		// 	}).placeAt("content");
+		// });
 	</script>
 </head>
 <body class='sapUiBody sapUiSizeCompact' id="content">

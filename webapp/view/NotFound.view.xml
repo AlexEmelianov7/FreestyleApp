@@ -1,13 +1,17 @@
 <mvc:View
 	xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m">
+	xmlns="sap.m"
+	controllerName="aliaksandr.yemelyanau.products.managment.controller.NotFound">
 
-	<MessagePage
-		title="Not Found"
-		text="The requested resource was not found"
-		icon="{sap-icon://document}"
-		id="page"
-		description="Here description goes">
-	</MessagePage>
+	<IllustratedMessage 
+		illustrationType="sapIllus-PageNotFound"
+		enableVerticalResponsiveness="true">
+		<additionalContent>
+			<Button
+				press="onNavToProductsOverview" 
+				text="{i18n>btnGoToProductsOverview}"
+				type="Emphasized" />
+		</additionalContent>
+	</IllustratedMessage>
 
 </mvc:View>

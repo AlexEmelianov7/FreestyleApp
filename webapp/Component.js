@@ -3,7 +3,7 @@ sap.ui.define([
 ], function (UIComponent) {
 	"use strict";
 
-	return UIComponent.extend("freestyle.app.Component", {
+	return UIComponent.extend("aliaksandr.yemelyanau.products.managment.Component", {
 		metadata: {
 			manifest: "json"
 		},
