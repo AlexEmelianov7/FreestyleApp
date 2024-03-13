@@ -1,0 +1,17 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+    <SelectDialog
+		id="countrySelectDialog"
+		title="{i18n>ttlCountryDialog}"
+        contentHeight="10rem"
+		items="{/categories}"
+		search="onCountrySelectDialogSearch"
+		confirm="onCountrySelectDialogClose"
+		cancel="onCountrySelectDialogClose"
+		multiSelect="true">
+		<StandardListItem
+			title="{country}"/>
+	</SelectDialog>
+</c:FragmentDefinition>
