@@ -1,0 +1,322 @@
+<mvc:View
+	controllerName="aliaksandr.yemelyanau.products.managment.controller.ProductDetails"
+	height="100%"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:f="sap.f"
+	xmlns:form="sap.ui.layout.form"
+    core:require="{ formatMessage: 'sap/base/strings/formatMessage' }">
+		<f:DynamicPage
+            showFooter="{productDetailsView>/viewMode/create}">
+			<f:title>
+				<f:DynamicPageTitle>
+					<f:heading>
+                        <VBox>
+                            <Title 
+                                text="{name}"
+                                visible="{= !${productDetailsView>/viewMode/create} }" />
+                            <Title
+                                text="{= ${productDetailsView>/viewMode/edit}
+                                ? ${parts: [
+                                    'i18n>tEditProduct',
+                                    'name'
+                                    ], formatter: 'formatMessage'} 
+                                : ${i18n>tNewProduct}}"
+                                visible="{productDetailsView>/viewMode/create}" />
+                        </VBox>
+					</f:heading>
+					<f:breadcrumbs>
+						<Breadcrumbs
+                            currentLocationText="{i18n>tProductDetails}">
+							<Link 
+                                press="onNavToProductsOverview"
+                                text="{i18n>tProductsOverview}" />
+						</Breadcrumbs>
+					</f:breadcrumbs>
+                    <f:expandedContent>
+						<Label 
+                            text="{category}"
+                            visible="{= !${productDetailsView>/viewMode/create} }"/>
+					</f:expandedContent>
+                    <f:snappedContent>
+						<Label 
+                            text="{category}"
+                            visible="{= !${productDetailsView>/viewMode/create} }"/>
+					</f:snappedContent>
+					<f:actions>
+                        <HBox
+                            visible="{= !${productDetailsView>/viewMode/create} }" >
+                            <Button
+                                press="onEditProductPress"
+                                text="{i18n>btnEdit}" 
+                                type="Emphasized"
+                                class="sapUiSmallMarginEnd" />
+                            <Button 
+                                press="onDeleteProductPress"
+                                text="{i18n>btnDelete}" 
+                                type="Transparent" /> 
+                        </HBox>
+					</f:actions>
+				</f:DynamicPageTitle>
+			</f:title>
+			<f:header>
+				<f:DynamicPageHeader 
+                    visible="{= !${productDetailsView>/viewMode/create} }" >
+					<VBox>
+                        <HBox>
+                            <Label
+                                text="{i18n>lPrice}"
+                                showColon="true"
+                                class="sapUiTinyMarginEnd"/>
+                            <ObjectNumber
+                                number="{price}"
+                                unit="{i18n>uUSD}" />
+                        </HBox>
+                        <HBox>
+                            <Label
+                                text="{i18n>lStatus}"
+                                showColon="true"
+                                class="sapUiTinyMarginEnd"/>
+                            <ObjectStatus
+                                state="{
+                                    path: 'status',
+                                    formatter: '.formatter.formatProductStatusState'
+                                }"
+                                text="{status}" />
+                        </HBox>
+                        <HBox
+                            visible="{= !!${quantity}}">
+                            <Label
+                                text="{i18n>lQuantity}"
+                                showColon="true"
+                                class="sapUiTinyMarginEnd"/>
+                            <Text
+                                text="{quantity}" />
+                        </HBox>
+                    </VBox>
+				</f:DynamicPageHeader>
+			</f:header>
+			<f:content>
+				<form:Form 
+                    editable="true"
+                    visible="{= !!${country} || !!${manufacturer} || !!${barcode} || !!${description} || ${productDetailsView>/viewMode/create} }">
+			        <form:title>
+				        <core:Title text="{i18n>ttlProductInfo}" />
+			        </form:title>
+                    <form:layout>
+                        <form:ResponsiveGridLayout
+                            labelSpanXL="2"
+                            labelSpanL="3"
+                            labelSpanM="4"
+                            labelSpanS="12"
+                            adjustLabelSpan="false"
+                            emptySpanXL="0"
+                            emptySpanL="4"
+                            emptySpanM="0"
+                            emptySpanS="0"
+                            columnsXL="2"
+                            columnsL="1"
+                            columnsM="1"
+                            singleContainerFullSize="false" />
+                    </form:layout>
+                    <form:formContainers>
+                        <form:FormContainer 
+                            title="{i18n>ttlGeneralInfo}"
+                            visible="{productDetailsView>/viewMode/create}">
+                            <form:formElements>
+                                <form:FormElement
+                                    label="{i18n>lName}" >
+                                    <form:fields>
+                                        <Input
+                                            width="15rem"
+                                            id="iName"
+                                            liveChange="onControlLiveChange"
+                                            required="true"
+                                            value="{
+                                                path: 'newProduct>/name',
+                                                type: 'sap.ui.model.type.String',
+                                                constraints : {
+                                                    minLength: 0,
+                                                    maxLength: 15
+                                                }
+                                            }"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lCategory}" >
+                                    <form:fields>
+                                        <Select
+                                            required="true"
+                                            width="15rem"
+                                            id="sProductCategories"
+                                            selectedKey="{newProduct>/category}"
+                                            forceSelection="false"
+                                            change="onControlLiveChange"
+                                            items="{
+                                                path: '/categories',
+                                                sorter: { path: 'name' }
+                                            }">
+                                            <core:Item key="{name}" text="{name}" />
+                                        </Select>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lPrice}" >
+                                    <form:fields>
+                                        <StepInput
+                                            id="siPrice"
+                                            width="15rem"
+                                            required="true"
+                                            change="onControlLiveChange"
+                                            fieldWidth="12rem"
+                                            description="{i18n>uUSD}"
+                                            displayValuePrecision="2"
+                                            min="10"
+                                            step="10"
+                                            value="{
+                                                path: 'newProduct>/price',
+                                                type: 'sap.ui.model.type.Float',
+                                                constraints : {
+                                                    minimum: 10
+                                                }
+                                            }"
+                                        />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lStatus}" >
+                                    <form:fields>
+                                        <Select
+                                            required="true"
+                                            liveChange="onControlLiveChange"
+                                            width="15rem"
+                                            selectedKey="{newProduct>/status}"
+                                            id="sProductStatuses"
+                                            forceSelection="false"
+                                            change="onControlLiveChange"
+                                            items="{
+                                                path: '/statuses',
+                                                sorter: { path: 'statusText' }
+                                            }">
+                                            <core:Item key="{statusText}" text="{statusText}" />
+                                        </Select>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lQuantity}"
+                                    visible="{= ${productDetailsView>/viewMode/create} &amp;&amp; ${newProduct>/status} !== 'Out of stock' }">
+                                    <form:fields>
+                                        <StepInput
+                                            textAlign="Center"
+                                            width="15rem"
+                                            id="siQuantity"
+                                            required="true"
+                                            change="onControlLiveChange"
+                                            value="{
+                                                path: 'newProduct>/quantity',
+                                                type: 'sap.ui.model.type.Integer'
+                                            }" />
+                                    </form:fields>
+                                </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+
+                        <form:FormContainer 
+                            title="{i18n>ttlAdditionalInfo}" >
+                            <form:formElements>
+                                <form:FormElement 
+                                    label="{i18n>lCountry}"
+                                    visible="{= !${productDetailsView>/viewMode/create} &amp;&amp; !!${country} }" >
+                                    <form:fields>
+                                        <Text
+                                            text="{country}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lCountry}"
+                                    visible="{productDetailsView>/viewMode/create}" >
+                                    <form:fields>
+                                        <Input
+                                            width="15rem"
+                                            value="{newProduct>/country}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lManufacturer}"
+                                    visible="{= !${productDetailsView>/viewMode/create} &amp;&amp; !!${manufacturer} }">
+                                    <form:fields>
+                                        <Text 
+                                            text="{manufacturer}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lManufacturer}"
+                                    visible="{productDetailsView>/viewMode/create}">
+                                    <form:fields>
+                                        <Input
+                                            width="15rem" 
+                                            value="{newProduct>/manufacturer}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lBarcode}"
+                                    visible="{= !${productDetailsView>/viewMode/create} &amp;&amp; !!${barcode} }" >
+                                    <form:fields>
+                                        <Text text="{barcode}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lBarcode}"
+                                    visible="{productDetailsView>/viewMode/create}" >
+                                    <form:fields>
+                                        <Input
+                                            width="15rem" 
+                                            value="{newProduct>/barcode}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lDescription}"
+                                    visible="{= !${productDetailsView>/viewMode/create} &amp;&amp; !!${description} }">
+                                    <form:fields>
+                                        <Text 
+                                            text="{description}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement 
+                                    label="{i18n>lDescription}"
+                                    visible="{productDetailsView>/viewMode/create}">
+                                    <form:fields>
+                                        <TextArea
+                                            width="15rem"
+                                            value="{newProduct>/description}"/>
+                                    </form:fields>
+                                 </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+                    </form:formContainers>
+		        </form:Form>
+			</f:content>
+            <f:footer>
+				<OverflowToolbar>
+                    <Button 
+                        id="btnMessagePopover"
+                        visible="{= !!${messages>/}.length }"
+                        text="{= ${messages>/}.length }"
+					    press="onMessagePopoverPress"
+                        type="Negative"
+                        icon="sap-icon://error"
+					    ariaHasPopup="Dialog"/>
+					<ToolbarSpacer />
+					<Button
+						press="onSaveProductPress"
+						type="Emphasized"
+						text="{i18n>btnSave}"/>
+					<Button
+						press="onCancelCreateProductPress"
+						type="Reject"
+						text="{i18n>btnCancel}"/>
+				</OverflowToolbar>
+			</f:footer>
+		</f:DynamicPage>
+</mvc:View>

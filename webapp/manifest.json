@@ -1,12 +1,18 @@
 {
 	"sap.app": {
-		"id": "freestyle.app",
+		"id": "aliaksandr.yemelyanau.products.managment",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"title": "{{appTitle}}",
 		"description": "{{appDescription}}",
 		"applicationVersion": {
 			"version": "1.0.0"
+		},
+		"dataSources": {
+			"mainService": {
+				"uri": "./model/localData.json",
+				"type": "JSON"
+			}
 		}
 	},
 	"sap.ui": {
@@ -21,12 +27,17 @@
 		]
 	},
 	"sap.ui5": {
-		"rootView": "freestyle.app.view.App",
+		"rootView": "aliaksandr.yemelyanau.products.managment.view.App",
+		"componentUsages": {
+			"componentCreation": {
+				"name": "aliaksandr.yemelyanau.products.managment.Component"
+			}
+		},
 		"routing": {
 			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
-				"viewPath": "freestyle.app.view",
+				"viewPath": "aliaksandr.yemelyanau.products.managment.view",
 				"controlId": "RootApp",
 				"controlAggregation": "pages",
 				"bypassed": {
@@ -43,16 +54,38 @@
 					"target": [
 						"productsOverview"
 					]
+				},
+				{
+					"pattern": "products/{productId}",
+					"name": "ProductDetails",
+					"target": [
+						"productDetails"
+					]
+				},
+				{
+					"pattern": "newProduct",
+					"name": "NewProduct",
+					"target": [
+						"newProduct"
+					]
 				}
 			],
-
 			"targets": {
 				"productsOverview": {
 					"viewName": "ProductsOverview",
 					"viewId": "productsOverview",
 					"viewLevel": 1
 				},
-
+				"productDetails": {
+					"viewName": "ProductDetails",
+					"viewId": "productDetails",
+					"viewLevel": 2
+				},
+				"newProduct": {
+					"viewName": "ProductDetails",
+					"viewId": "newProduct",
+					"viewLevel": 2
+				},
 				"notFound": {
 					"viewName": "NotFound",
 					"viewId": "notFound"
@@ -60,7 +93,7 @@
 			}
 		},
 		"dependencies": {
-			"minUI5Version": "1.54.0",
+			"minUI5Version": "1.121.0",
 			"libs": {
 				"sap.m": {}
 			}
@@ -69,8 +102,11 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "freestyle.app.i18n.i18n"
+					"bundleName": "aliaksandr.yemelyanau.products.managment.i18n.i18n"
 				}
+			},
+			"": {
+				"dataSource": "mainService"
 			}
 		}
 	}

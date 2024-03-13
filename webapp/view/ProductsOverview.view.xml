@@ -1,5 +1,5 @@
 <mvc:View
-		controllerName="freestyle.app.controller.ProductsOverview"
+		controllerName="aliaksandr.yemelyanau.products.managment.controller.ProductsOverview"
 		height="100%"
 		xmlns:mvc="sap.ui.core.mvc"
 		xmlns:core="sap.ui.core"
@@ -15,10 +15,10 @@
 						<svm:SmartVariantManagement id="smartVariant" showExecuteOnSelection="true" />
 					</f:heading>
 					<f:expandedContent>
-						<Label id="expandedLabel" text="No filters active" />
+						<Label id="expandedLabel" text="{i18n>lNoFiltersActive}" />
 					</f:expandedContent>
 					<f:snappedContent>
-						<Label id="snappedLabel" text="No filters active" />
+						<Label id="snappedLabel" text="{i18n>lNoFiltersActive}" />
 					</f:snappedContent>
 				</f:DynamicPageTitle>
 			</f:title>
@@ -144,9 +144,16 @@
 			<f:content>
 				<Table
 					id="productsTable"
-					items="{/products}"
+					items="{
+						path: '/products',
+						sorter: {
+							path: 'date',
+							descending: false
+						}
+					}"
 					mode="MultiSelect"
 					updateFinished="onProductsTableUpdateFinished"
+					selectionChange="onProductsTableSelectionChange"
 				>
 					<headerToolbar>
 						<OverflowToolbar>
@@ -159,28 +166,32 @@
 						</OverflowToolbar>
 					</headerToolbar>
 					<columns>
-						<Column id="name_col">
+						<Column id="colName">
 							<Text text="{i18n>tName}"/>
 						</Column>
-						<Column id="category_col">
+						<Column id="colCategory">
 							<Text text="{i18n>tCategory}"/>
 						</Column>
-						<Column id="description_col">
+						<Column id="colDescription">
 							<Text text="{i18n>tDescription}"/>
 						</Column>
-						<Column id="price_col">
+						<Column id="colPrice">
 							<Text text="{i18n>tPrice}"/>
 						</Column>
-						<Column id="country_col">
+						<Column id="colCountry">
 							<Text text="{i18n>tCountry}"/>
 						</Column>
-						<Column id="created_col">
+						<Column id="colCreated">
 							<Text text="{i18n>tCreated}"/>
 						</Column>
 					</columns>
 
 					<items>
-						<ColumnListItem vAlign="Middle">
+						<ColumnListItem
+							press="onNavProductPress"
+							vAlign="Middle"
+							type="Navigation"
+						>
 							<cells>
 								<ObjectIdentifier title="{name}" />
 								<Text text="{category}" />
@@ -209,10 +220,13 @@
 				<OverflowToolbar>
 					<ToolbarSpacer />
 					<Button
+						press="onCreateProductPress"
 						icon="sap-icon://add"
 						type="Emphasized"
 						text="{i18n>btnCreate}"/>
 					<Button
+						press="onDeleteProductsPress"
+						enabled="{productsOverview>/deleteBtnEnabled}"
 						icon="sap-icon://delete"
 						type="Reject"
 						text="{i18n>btnDelete}"/>

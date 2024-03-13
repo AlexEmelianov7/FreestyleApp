@@ -1,11 +1,12 @@
 /**
- * Controller for managing Stores Overview view.
- * @namespace freestyle.app.controller.ProductsOverview
- * @extends freestyle.app.controller.BaseController
+ * Controller for managing Products Overview view.
+ * @namespace aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+ * @extends aliaksandr.yemelyanau.products.managment.controller.BaseController
  */
 sap.ui.define([
-	"freestyle/app/controller/BaseController",
-	"freestyle/app/model/constants",
+	"aliaksandr/yemelyanau/products/managment/controller/BaseController",
+	"aliaksandr/yemelyanau/products/managment/model/constants",
+	"aliaksandr/yemelyanau/products/managment/model/formatter",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
@@ -24,10 +25,12 @@ sap.ui.define([
 	"sap/ui/model/Sorter",
 	"sap/m/Text",
 	"sap/m/ObjectIdentifier",
-	"sap/m/ObjectNumber"
+	"sap/m/ObjectNumber",
+	"sap/m/MessageBox"
 ], function (
 	BaseController,
 	constants,
+	formatter,
 	JSONModel,
 	Filter,
 	FilterOperator,
@@ -46,146 +49,71 @@ sap.ui.define([
 	Sorter,
 	Text,
 	ObjectIdentifier,
-	ObjectNumber
+	ObjectNumber,
+	MessageBox
 ) {
 	"use strict";
 
-	return BaseController.extend("freestyle.app.controller.ProductsOverview", {
+	return BaseController.extend("aliaksandr.yemelyanau.products.managment.controller.ProductsOverview", {
 		/**
 		 * Initializes the ProductsOverview controller.
 		 * Creates and sets the view model for the productsOverview view.
 		 * Loads the data from the localData.json file and sets it as the model for the controller.
 		 * Creates a view model for the ProductsOverview.
-		 * Registers functions for data handling and filtering.
-		 * Initializes the SmartVariantManagement control for personalization.
-		 * Registers the controller for p13n (personalization) events.
+		 * Registers the controller for Products table p13n (personalization) events.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 */
 		onInit: function() {
-			const oModel = new JSONModel({});
-			oModel.loadData("./model/localData.json")
-			this.setModel(oModel);
-
 			const oViewModel = new JSONModel({
-				productsTableTitle: this.getResourceBundle().getText("ttlNoData")
+				productsTableTitle: this.getResourceBundle().getText("ttlNoData"),
+				deleteBtnEnabled: false
 			})
-			this.setModel(oViewModel, "productsOverview")
-
-			this.applyData = this.applyData.bind(this);
-			this.fetchData = this.fetchData.bind(this);
-			this.getFiltersWithValues = this.getFiltersWithValues.bind(this);
-
-			this.oSmartVariantManagement = this.getView().byId("smartVariant");
-			this.oExpandedLabel = this.getView().byId("expandedLabel");
-			this.oSnappedLabel = this.getView().byId("snappedLabel");
+			this.setModel(oViewModel, "productsOverview");
 
 			this.oFilterBar = this.getView().byId("filterBar");
 			this.oTable = this.getView().byId("productsTable");
 
-			this.oFilterBar.registerFetchData(this.fetchData);
-			this.oFilterBar.registerApplyData(this.applyData);
-			this.oFilterBar.registerGetFiltersWithValues(this.getFiltersWithValues);
-			
-			const oPersInfo = new PersonalizableInfo({
-				type: "filterBar",
-				keyName: "persistencyKey",
-				dataSource: "",
-				control: this.oFilterBar
-			});
-			this.oSmartVariantManagement.addPersonalizableControl(oPersInfo);
-			this.oSmartVariantManagement.initialise(function () {}, this.oFilterBar);
-
 			this._registerForP13n();
 		},
 
-		// Smart variant managment methods (not completed yet)
-		fetchData: function () {
-			const aData = this.oFilterBar.getAllFilterItems().reduce(function (aResult, oFilterItem) {
-				aResult.push({
-					groupName: oFilterItem.getGroupName(),
-					fieldName: oFilterItem.getName(),
-					fieldData: oFilterItem.getControl().getSelectedKeys()
-				});
-
-				return aResult;
-			}, []);
-
-			return aData;
-		},
-
-		applyData: function (aData) {
-			aData.forEach(function (oDataObject) {
-				const oControl = this.oFilterBar.determineControlByName(oDataObject.fieldName, oDataObject.groupName);
-				oControl.setSelectedKeys(oDataObject.fieldData);
-			}, this);
-		},
-
-		getFiltersWithValues: function () {
-			const aFiltersWithValue = this.oFilterBar.getFilterGroupItems().reduce((aResult, oFilterGroupItem) => {
-				const oControl = oFilterGroupItem.getControl();
-
-				if (oControl && oControl.getSelectedKeys() && oControl.getSelectedKeys().length > 0) {
-					aResult.push(oFilterGroupItem);
-				}
-
-				return aResult;
-			}, []);
-
-			return aFiltersWithValue;
-		},
-
+		/**
+		 * Handles the filter change event.
+		 * Sets the products table overlay.
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 */
 		onFilterChange: function() {
-			this._updateLabelsAndTable();
+			this._setProductsTableOverlay();
 		},
 
+		/**
+		 * Handles the after variant load event.
+		 * Sets the products table overlay.
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 */
 		onAfterVariantLoad: function () {
-			this._updateLabelsAndTable();
+			this._setProductsTableOverlay();
 		},
 
-		_getFormattedSummaryTextExpanded: function() {
-			const aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
-
-			if (aFiltersWithValues.length === 0) {
-				return "No filters active";
-			}
-
-			let sText = aFiltersWithValues.length + " filters active",
-				aNonVisibleFiltersWithValues = this.oFilterBar.retrieveNonVisibleFiltersWithValues();
-
-			if (aFiltersWithValues.length === 1) {
-				sText = aFiltersWithValues.length + " filter active";
-			}
-
-			if (aNonVisibleFiltersWithValues && aNonVisibleFiltersWithValues.length > 0) {
-				sText += " (" + aNonVisibleFiltersWithValues.length + " hidden)";
-			}
-
-			return sText;
-		},
-
-		_getFormattedSummaryText: function() {
-			const aFiltersWithValues = this.oFilterBar.retrieveFiltersWithValues();
-
-			if (aFiltersWithValues.length === 0) {
-				return "No filters active";
-			}
-
-			if (aFiltersWithValues.length === 1) {
-				return aFiltersWithValues.length + " filter active: " + aFiltersWithValues.join(", ");
-			}
-
-			return aFiltersWithValues.length + " filters active: " + aFiltersWithValues.join(", ");
-		},
-
-		_updateLabelsAndTable: function () {
-			this.oExpandedLabel.setText(this._getFormattedSummaryTextExpanded());
-			this.oSnappedLabel.setText(this._getFormattedSummaryText());
+		/**
+		 * Sets the products table overlay.
+		 * @private
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 */
+		_setProductsTableOverlay: function () {
 			this.oTable.setShowOverlay(true);
 		},
 
+		/**
+		 * Handles the selection change event.
+		 * Fires the filter change event on the filter bar.
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 * @param {sap.ui.base.Event} oEvent - The event object.
+		 * @returns {void}
+		 */
 		onSelectionChange: function (oEvent) {
-			this.oSmartVariantManagement.currentVariantSetModified(true);
 			this.oFilterBar.fireFilterChange(oEvent);
 		},
 
@@ -193,7 +121,7 @@ sap.ui.define([
 		 * Handles the update finished event of the products table.
 		 * Updates the title of the products table based on the total number of items.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {sap.ui.base.Event} oEvent - The update finished event object.
 		 */
 		onProductsTableUpdateFinished: function(oEvent) {
@@ -214,17 +142,17 @@ sap.ui.define([
 		 * Loads the PriceValueHelpDialog fragment and sets up the dialog with range key fields.
 		 * Sets the tokens from the price multi-input control and opens the dialog.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 */
 		onOpenPriceValueHelpDialog: function() {
 			this._oPriceMultiInput = this.byId("miPrice");
 
 			this.loadFragment({
-				name: "freestyle.app.view.fragment.PriceValueHelpDialog"
+				name: "aliaksandr.yemelyanau.products.managment.view.fragment.PriceValueHelpDialog"
 			}).then(function(oPriceValueHelpDialog) {
 				this._oPriceValueHelpDialog = oPriceValueHelpDialog;
 				oPriceValueHelpDialog.setRangeKeyFields([{
-					label: "Price",
+					label: constants.PRICE_COL_LABEL,
 					key: "id",
 					type: "float",
 					typeInstance: new TypeFloat({}, {
@@ -241,7 +169,7 @@ sap.ui.define([
 		 * Handles the press event of the OK button in the PriceValueHelpDialog.
 		 * Sets the tokens from the PriceValueHelpDialog to the price multi-input control and closes the dialog.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {sap.ui.base.Event} oEvent - The press event object.
 		 */
 		onPriceValueHelpDialogOkPress: function(oEvent) {
@@ -254,7 +182,7 @@ sap.ui.define([
 		 * Handles the press event of the Cancel button in the PriceValueHelpDialog.
 		 * Closes the PriceValueHelpDialog.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 */
 		onPriceValueHelpDialogCancelPress: function () {
 			this._oPriceValueHelpDialog.close();
@@ -264,7 +192,7 @@ sap.ui.define([
 		 * Handles the after close event of the PriceValueHelpDialog.
 		 * Destroys the PriceValueHelpDialog instance.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 */
 		onPriceValueHelpDialogAfterClose: function () {
 			this._oPriceValueHelpDialog.destroy();
@@ -275,7 +203,7 @@ sap.ui.define([
 		 * Loads the CountrySelectDialog fragment and sets up the dialog with filtering based on the input value.
 		 * Opens the dialog with the provided input value.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {sap.ui.base.Event} oEvent - The event object that triggered the method.
 		 */
 		onOpenCountrySelectDialog: function(oEvent) {
@@ -284,7 +212,7 @@ sap.ui.define([
 			if (!this._pSelectDialog) {
 				this._pSelectDialog = Fragment.load({
 					id: this.getView().getId(),
-					name: "freestyle.app.view.fragment.CountrySelectDialog",
+					name: "aliaksandr.yemelyanau.products.managment.view.fragment.CountrySelectDialog",
 					controller: this
 				}).then(oSelectDialog => {
 					this.getView().addDependent(oSelectDialog);
@@ -307,7 +235,7 @@ sap.ui.define([
 		 * Handles the search event of the CountrySelectDialog.
 		 * Filters the items in the dialog based on the search value.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {sap.ui.base.Event} oEvent - The search event object.
 		 */
 		onCountrySelectDialogSearch: function(oEvent) {
@@ -324,7 +252,7 @@ sap.ui.define([
 		 * Handles the cancel and confirm evens of the CountrySelectDialog.
 		 * Adds the selected items as tokens to the multi-input control.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {sap.ui.base.Event} oEvent - The close event object.
 		 */
 		onCountrySelectDialogClose: function(oEvent) {
@@ -344,7 +272,7 @@ sap.ui.define([
 		 * Retrieves the selected filter items from the provided FilterGroupItem.
 		 * Based on the type of control in the FilterGroupItem, different selection values are obtained.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {sap.ui.comp.filterbar.FilterGroupItem} oFilterGroupItem - The FilterGroupItem containing the selection control.
 		 * @returns {Array} - The selected filter items.
 		 */
@@ -383,7 +311,7 @@ sap.ui.define([
 		 * Transforms the selected filter items into an array of filters.
 		 * Based on the type of filter item, different filters are created.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Array} aFilterItems - The selected filter items.
 		 * @param {sap.ui.comp.filterbar.FilterGroupItem} oFilterGroupItem - The filter group item associated with the filter items.
 		 * @returns {Array} - The array of filters.
@@ -395,8 +323,8 @@ sap.ui.define([
 						return new Filter({
 							path: oFilterGroupItem.getName(),
 					  		operator: FilterOperator.BT,
-					  		value1: oFilterItem.dateFrom.toISOString().slice(0, 10),
-					  		value2: oFilterItem.dateTo.toISOString().slice(0, 10)
+					  		value1: formatter.formatDate(oFilterItem.dateFrom),
+					  		value2: formatter.formatDate(oFilterItem.dateTo)
 					});
 				  	case typeof oFilterItem === "object" && oFilterItem.data().hasOwnProperty("range"):
 						const sSelectedItemValue = oFilterItem.data("range").value1;
@@ -424,13 +352,13 @@ sap.ui.define([
 		 * Retrieves the selected filter items for each filter group item and creates an array of filters.
 		 * Filters the table binding with the created filters.
 		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 */
 		onApplyFilters: function() {
 			this.aTableFilters = this.oFilterBar.getFilterGroupItems().reduce((aResult, oFilterGroupItem) => {
 				const aFilterItems = this._getSelectionControlsFilterItems(oFilterGroupItem);
 
-				if (aFilterItems.length > 0) {
+				if (aFilterItems.length) {
 					const aFilters = this._getFilterBarFilters(aFilterItems, oFilterGroupItem)
 					aResult.push(new Filter({
 						filters: aFilters,
@@ -450,16 +378,16 @@ sap.ui.define([
 		 * Creates and initializes the metadata helper and registers the table with the p13n engine.
 		 * Attaches a state change event listener to the p13n engine.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 */
 		_registerForP13n: function() {
 			this.oMetadataHelper = new MetadataHelper([
-				{key: constants.NAME_COL_ID, label: "Name", path: "name"},
-				{key: constants.CATEGORY_COL_ID, label: "Category", path: "category"},
-				{key: constants.DESCRIPTION_COL_ID, label: "Description", path: "description"},
-				{key: constants.PRICE_COL_ID, label: "Price", path: "price"},
-				{key: constants.COUNTRY_COL_ID, label: "Country", path: "country"},
-				{key: constants.CREATED_COL_ID, label: "Created", path: "date"},
+				{key: constants.NAME_COL_ID, label: constants.NAME_COL_LABEL, path: constants.NAME_PATH},
+				{key: constants.CATEGORY_COL_ID, label: constants.CATEGORY_COL_LABEL, path: constants.CATEGORY_PATH},
+				{key: constants.DESCRIPTION_COL_ID, label: constants.DESCRIPTION_COL_LABEL, path: constants.DESCRIPTION_PATH},
+				{key: constants.PRICE_COL_ID, label: constants.PRICE_COL_LABEL, path: constants.PRICE_PATH},
+				{key: constants.COUNTRY_COL_ID, label: constants.COUNTRY_COL_LABEL, path: constants.COUNTRY_PATH},
+				{key: constants.CREATED_COL_ID, label: constants.CREATED_COL_LABEL, path: constants.CREATED_PATH},
 			]);
 
 			Engine.getInstance().register(this.oTable, {
@@ -481,14 +409,14 @@ sap.ui.define([
 				}
 			});
 
-			Engine.getInstance().attachStateChange(this.onProductsTableStateChange.bind(this));
+			Engine.getInstance().attachStateChange(this._onProductsTableStateChange.bind(this));
 		},
 
 		/**
 		 * Transforms the Sorter and Group state into an array of Sorter instances.
 		 * Constructs and returns an array of Sorter instances based on the provided sorter and group state.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Array} aSorter - The sorter state array.
 		 * @param {Array} aGroups - The group state array.
 		 * @returns {Array} - The array of Sorter instances.
@@ -519,7 +447,7 @@ sap.ui.define([
 		 * Sets the sort indicators on the table columns based on the provided sorters.
 		 * Sets the sort indicator on each table column based on the corresponding sorter in the provided sorters array.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Array} aSorters - The array of Sorter instances.
 		 */
 		_setProductsTableSortIndicators: function(aSorters) {
@@ -540,7 +468,7 @@ sap.ui.define([
 		 * Sets the grouping state on the table columns based on the provided groups.
 		 * Sets the "grouped" attribute on each table column based on the corresponding group in the provided groups array.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Array} aGroups - The group state array.
 		 */
 		_setProductsTableGroups: function(aGroups) {
@@ -554,7 +482,7 @@ sap.ui.define([
 		 * Sets the visibility and order of the table columns based on the provided columns state.
 		 * Sets the visibility and order of the table columns based on the corresponding column state in the provided columns array.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Array} aColumns - The columns state array.
 		 */
 		_setProductsTableColumns: function(aColumns) {
@@ -571,7 +499,7 @@ sap.ui.define([
 		 * Creates the table cells based on the provided columns state.
 		 * Creates and returns an array of table cells based on the corresponding column state in the provided columns array.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Array} aColumns - The columns state array.
 		 * @returns {Array} - The array of table cells.
 		 */
@@ -580,16 +508,16 @@ sap.ui.define([
 				const sPath = this.oMetadataHelper.getProperty(oColumnState.key).path;
 			  
 				switch (oColumnState.key) {
-					case "name_col":
+					case constants.NAME_COL_ID:
 						return new ObjectIdentifier({
 							title: "{" + sPath + "}"
 						});
-					case "price_col":
+					case constants.PRICE_COL_ID:
 						return new ObjectNumber({
 							number: "{" + sPath + "}",
 							unit: this.getResourceBundle().getText("uUSD")
 						});
-					case "created_col":
+					case constants.CREATED_COL_ID:
 						return new Text({
 							text: {
 								path: sPath,
@@ -613,7 +541,7 @@ sap.ui.define([
 		/**
 		 * Sets the visibility, sort indicator, and grouped state of all table columns to their initial values.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 */
 		_hideProductsTableColumns: function() {
 			this.oTable.getColumns().forEach(oColumn => {
@@ -626,7 +554,7 @@ sap.ui.define([
 		/**
 		 * Binds the table items based on the provided sorter, filters and cell configuration.
 		 * @private
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Array} aSorter - The array of Sorter instances.
 		 * @param {Array} aCells - The array of table cells.
 		 */
@@ -645,11 +573,11 @@ sap.ui.define([
 		/**
 		 * Event handler for the state change event of the p13n engine.
 		 * Updates the table state based on the provided state object with sorters and cell configuration
-		 * @public
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @private
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Object} oEvent - The state change event object.
 		 */
-		onProductsTableStateChange: function(oEvent) {
+		_onProductsTableStateChange: function(oEvent) {
 			const oState = oEvent.getParameter("state");
   
 			if (!oState) {
@@ -666,13 +594,13 @@ sap.ui.define([
 			const aCells = this._createProductsTableCells(oState.Columns);
 			
 			this._bindProductsTable(aSorter, aCells);
-			
 		},
 
 		/**
 		 * Opens the personalization (p13n) dialog for the table.
 		 * Shows the p13n dialog for the table with the specified settings.
-		 * @memberof freestyle.app.controller.ProductsOverview
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
 		 * @param {Object} oEvent - The event object that triggered the dialog opening.
 		 */
 		openP13nDialog: function(oEvent) {
@@ -682,5 +610,122 @@ sap.ui.define([
 				source: oEvent.getSource()
 			});
 		},
+
+		/**
+		 * Handles the selection change event of the products table.
+		 * Updates the delete button's enabled state based on the number of selected items.
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 * @param {sap.ui.base.Event} oEvent - The event object.
+		 */
+		onProductsTableSelectionChange: function(oEvent) {
+			const aSelectedItems = oEvent.getSource().getSelectedItems();
+
+			aSelectedItems.length 
+			? this.getView().getModel("productsOverview").setProperty("/deleteBtnEnabled", true)
+			: this.getView().getModel("productsOverview").setProperty("/deleteBtnEnabled", false)
+		},
+
+		/**
+		 * Retrieves the products that are not selected for deletion.
+		 * @private
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 * @param {Array} aProducts - The array of all products.
+		 * @param {Array} aSelectedProducts - The array of selected products.
+		 * @returns {Array} The array of products to keep.
+		 */
+		_getProductsForDeletion: function(aProducts, aSelectedProducts) {
+			const aSelectedProductsIds = aSelectedProducts
+											.map(oProduct => oProduct.getBindingContext().getProperty("id"));
+			return aProducts.filter(oProduct => !aSelectedProductsIds.includes(oProduct.id));
+		},
+
+		/**
+		 * Deletes the selected products from the products array.
+		 * @private
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 * @param {Array} aSelectedProducts - The array of selected products.
+		 * @returns {void}
+		 */
+		_deleteSelectedProducts: function(aSelectedProducts) {
+			const aProducts = this.getView().getModel().getProperty("/products");
+			const aUpdatedProducts = this._getProductsForDeletion(aProducts, aSelectedProducts);
+
+			this.getView().getModel().setProperty("/products", aUpdatedProducts);
+			this.oTable.removeSelections();
+		},
+
+		/**
+		 * Retrieves the confirmation message for deleting selected products.
+		 * @private
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 * @param {Array} aSelectedProducts - The array of selected products.
+		 * @returns {string} The confirmation message.
+		 */
+		_getProductsDeleteConfirmationMessage: function(aSelectedProducts) {
+			const iSelectedProductsCount = aSelectedProducts.length;
+			let sConfirmationMessage;
+
+			if (iSelectedProductsCount > 1) {
+				sConfirmationMessage = this.getResourceBundle().getText("msgDeleteProducts", aSelectedProducts.length);
+			} else {
+				const sDeletedProductName = this.oTable.getSelectedItem().getBindingContext().getProperty("name");
+				sConfirmationMessage = this.getResourceBundle().getText("msgDeleteProduct", sDeletedProductName);	
+			}
+
+			return sConfirmationMessage;
+		},
+
+		/**
+		 * Handles the press event of the Delete Products button.
+		 * Retrieves the confirmation message, shows a confirmation dialog,
+		 * and performs the delete operation if confirmed.
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 */
+		onDeleteProductsPress: function() {
+			const aSelectedProducts = this.oTable.getSelectedItems();
+			const sConfirmationMessage = this._getProductsDeleteConfirmationMessage(aSelectedProducts);
+
+			MessageBox.confirm(sConfirmationMessage, {
+				title: this.getResourceBundle().getText("ttlConfirmDeletion"),
+				actions: [
+					MessageBox.Action.OK,
+					MessageBox.Action.CANCEL
+				],
+				emphasizedAction: MessageBox.Action.OK,
+				initialFocus: null,
+				onClose: (oAction) => {
+					if (oAction === MessageBox.Action.OK) {		
+						this._deleteSelectedProducts(aSelectedProducts);
+						this.getView().getModel("productsOverview").setProperty("/deleteBtnEnabled", false);
+					}
+				}
+			})
+		},
+
+		/**
+		 * Handles the press event of a product navigation link.
+		 * Navigates to the product details page for the selected product.
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 * @param {sap.ui.base.Event} oEvent - The event object.
+		 */
+		onNavProductPress: function(oEvent) {
+			const oProductContext = oEvent.getSource().getBindingContext();
+			this.getRouter().navTo("ProductDetails", {
+				productId: oProductContext.getProperty("id")
+			})
+		},
+
+		/**
+		 * Handles the press event of the Create Product button.
+		 * Navigates to the new product creation page.
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.ProductsOverview
+		 */
+		onCreateProductPress: function() {
+			this.getRouter().navTo("NewProduct");
+		}	
 	});
 });

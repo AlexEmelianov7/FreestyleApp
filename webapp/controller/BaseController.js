@@ -1,18 +1,51 @@
 /**
  * Base controller that contains methods used throughout the app
- * @namespace freestyle.app.controller.BaseController
+ * @namespace aliaksandr.yemelyanau.products.managment.controller.BaseController
  * @extends sap.ui.core.mvc.Controller
  */
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-], function (Controller) {
+    "sap/ui/core/mvc/Controller",
+	"sap/ui/core/format/DateFormat"
+], function (
+    Controller,
+	DateFormat
+    ) {
     "use strict";
 
-    return Controller.extend("freestyle.app.controller.BaseController", {
+    return Controller.extend("aliaksandr.yemelyanau.products.managment.controller.BaseController", {
+        bindView: function (sPath) {
+			this.getView().bindElement({
+				path: sPath,
+				events: {
+					change: this._onBindingChange.bind(this)
+				}
+			});
+		},
+
+        _onBindingChange : function () {
+			const oView = this.getView();
+			const oViewBinding = oView.getElementBinding();
+
+			if (!oViewBinding.getBoundContext().getProperty("id")) {
+				this.getRouter().getTargets().display("notFound");
+				return;
+			}
+		},
+
+        /**
+		 * Retrieves the router associated with the controller.
+		 * @public
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.BaseController
+		 * @returns {sap.ui.core.routing.Router} - The router for this component
+		 */
+        getRouter : function () {
+            return sap.ui.core.UIComponent.getRouterFor(this);
+        },
+
         /**
 		 * Sets the model for the view.
 		 * @public
-		 * @memberof freestyle.app.controller.BaseController
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.BaseController
 		 * @param {sap.ui.model.Model} oModel - The model instance
 		 * @param {string} sName - The model name
 		 * @returns {sap.ui.mvc.View} - The view instance
@@ -24,11 +57,19 @@ sap.ui.define([
         /**
    		 * Retrieves the resource bundle for internationalization.
 		 * @public
-		 * @memberof freestyle.app.controller.BaseController
+		 * @memberof aliaksandr.yemelyanau.products.managment.controller.BaseController
    		 * @returns {sap.ui.model.resource.ResourceModel} The resource bundle.
    		 */
         getResourceBundle : function () {
             return this.getOwnerComponent().getModel("i18n").getResourceBundle();
-        }
+        },
+
+		// formatDate: function(vDate) {
+		// 	const oDateFormat = DateFormat.getDateInstance({
+		// 		pattern: "yyyy-MM-dd"
+		// 	});
+
+		// 	return oDateFormat.format(vDate);
+		// },
     });
 });
